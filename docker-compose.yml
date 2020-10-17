@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+    mariadb:
+        image: mariadb
+        restart: always
+        ports:
+        - 3308:3306
+        environment:
+            MYSQL_DATABASE: db
+            MYSQL_ROOT_PASSWORD: QKh8RrWnc51CNcs2DigDsTIxg9J1SXZo
+            MYSQL_USER: username
+            MYSQL_PASSWORD: QKh8RrWnc51CNcs2DigDsTIxg9J1SXZo
+        volumes:
+            - ./Mariadb:/docker-entrypoint-initdb.d
+            - ./DB:/var/lib/mysql
+    api:
+        build: ./api
+        restart: always
+        volumes: 
+            - ./api/:/app
+        ports:
+            - 8000:80
+    nginx:
+        image: nginx:latest
+        restart: always
+        ports:
+            - 8080:80
+        volumes:
+            - ./Nginx/core:/etc/nginx/conf.d
+            - ./Nginx/www:/var/www/
+            - ./Nginx/Logs:/var/log/nginx/
+            - ./Nginx/html:/usr/share/nginx/html/
