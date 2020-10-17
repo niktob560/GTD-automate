@@ -25,7 +25,7 @@ SECRET_KEY = 'lb$51x^oo!!zyxc)e0v8%809lq^7id)^huste)b*)k&j8rtx8e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crate',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'gtd_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db',
+        'USER': 'AUTOMAT',
+        'PASSWORD': 'WiTSDmtChVmNS53szQZTh5mwPFHTAc9k',
+        'HOST': 'mariadb',
+        'PORT': '3306'
     }
 }
 

@@ -2,7 +2,7 @@ FROM python:3
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir django-ninja mariadb;
+RUN pip install --no-cache-dir django-ninja mysqlclient pydantic-django;
 
 COPY . .
 
