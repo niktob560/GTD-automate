@@ -27,10 +27,10 @@ api = NinjaAPI()
 
 
 @api.post("/crate/post_record")
-def post_crate_record(request, note: crate.schemes.CrateRecordIn):
+def post_crate_record(request, r: crate.schemes.CrateRecordIn):
     try:
         record = crate.models.CrateRecord()
-        record.note = note
+        record.note = r.note
         record.save()
         return {'result': 'success', 'code': 0}
     except Exception as e:
