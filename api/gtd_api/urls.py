@@ -29,6 +29,8 @@ api = NinjaAPI()
 @api.post("/crate/post_record")
 def post_crate_record(request, r: crate.schemes.CrateRecordIn):
     try:
+        if r.note.__len__() < 4:
+            raise ValueError("Note must contain at least 4 chars")
         record = crate.models.CrateRecord()
         record.note = r.note
         record.save()
