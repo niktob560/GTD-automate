@@ -40,7 +40,7 @@ def post_crate_record(request, r: crate.schemes.CrateRecordIn):
         return {'result': 'error', 'code': 1}
 
 @api.get("/crate/get_record", response=crate.schemes.CrateRecordOut)
-def get_crate_record(request, id: crate.schemes.CrateRecordIn):
+def get_crate_record(request, id: int):
     try:
         if id <= 0:
             raise ValueError("Bad id")
