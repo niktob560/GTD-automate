@@ -57,7 +57,7 @@ def get_crate_record(request, id: int):
 def get_crate_records(request, limit: int = 100, offset: int = 0):
     if limit > 500:
         limit = 500
-    return list(crate.models.CrateRecord.objects.order_by('-id')[offset:limit])
+    return list(crate.models.CrateRecord.objects.order_by('-id')[offset:(offset+limit)])
 
 @api.delete("/crate/delete_record")
 def delete_crate_record(request, id: crate.schemes.CrateRecordId):
