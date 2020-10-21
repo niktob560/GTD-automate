@@ -1,6 +1,7 @@
 from django.db import models
+from ninja import Schema
+from pydantic_django import PydanticDjangoModel
 
-# Create your models here.
 
 class CrateRecord(models.Model):
     id = models.AutoField(primary_key=True, db_column='id')
@@ -10,3 +11,14 @@ class CrateRecord(models.Model):
         return {'id': self.id, 'creation_date': f"{self.creation_date}", 'note': self.note}
     class Meta:
         db_table = 'crate'
+
+class CrateRecordIn(Schema):
+    note: str
+
+class CrateRecordId(Schema):
+    id: int
+
+class CrateRecordOut(PydanticDjangoModel):
+    class Config:
+        model = CrateRecord
+        orm_mode = True
