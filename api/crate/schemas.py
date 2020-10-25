@@ -2,11 +2,12 @@ import records.models
 from ninja import Schema
 from pydantic_django import PydanticDjangoModel
 
-class RecordIn(Schema):
+class CrateRecordIn(Schema):
     note: str
 
 
-class RecordOut(PydanticDjangoModel):
+class CrateRecordOut(PydanticDjangoModel):
     class Config:
         model = records.models.Record
         orm_mode = True
+        exclude = ('record_type')

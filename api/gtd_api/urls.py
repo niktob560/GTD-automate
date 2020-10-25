@@ -19,12 +19,15 @@ from django.http import HttpResponseBadRequest
 from ninja import NinjaAPI
 from django.http import HttpResponse
 
-import crate.urls
+from crate.api import router as crate_router
+from archive.api import router as archive_router
 
-api = NinjaAPI(urls_namespace='main')
 
+api = NinjaAPI()
+api.add_router('/crate/', crate_router)
+api.add_router('/archive/', archive_router)
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
-    path('api/crate/', crate.urls.api.urls)
+    path('api/', api.urls)
 ]
