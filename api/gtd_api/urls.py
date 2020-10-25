@@ -17,53 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponseBadRequest
 from ninja import NinjaAPI
-from typing import List
-import crate.models
-import crate.schemes
 from django.http import HttpResponse
 
+import crate.urls
 
-api = NinjaAPI()
+api = NinjaAPI(urls_namespace='main')
 
 
-@api.post("/crate/post_record")
-def post_crate_record(request, r: crate.schemes.CrateRecordIn):
-    try:
-        if r.note.__len__() < 4:
-            raise ValueError("Note must contain at least 4 chars")
-        record = crate.models.CrateRecord()
-        record.note = r.note
-        record.save()
-        return {'result': 'success', 'code': 0}
-    except Exception as e:
-        print(f"{e}")
-        return {'result': 'error', 'code': 1}
-
-@api.get("/crate/get_record", response=crate.schemes.CrateRecordOut)
-def get_crate_record(request, id: int):
-    try:
-        if id <= 0:
-            raise ValueError("Bad id")
-        rs = crate.models.CrateRecord.objects.filter(id=id)
-        if rs.__len__() <= (id - 1):
-            raise ValueError("Bad id")
-        r = rs[0]
-        return r
-    except Exception as e:
-        print(f"{e}")
-        return HttpResponseBadRequest(content=f"{e}")
-    
-@api.get("/crate/get_records", response=List[crate.schemes.CrateRecordOut])
-def get_crate_records(request, limit: int = 100, offset: int = 0):
-    if limit > 500:
-        limit = 500
-    return list(crate.models.CrateRecord.objects.order_by('-id')[offset:(offset+limit)])
-
-@api.delete("/crate/delete_record")
-def delete_crate_record(request, id: crate.schemes.CrateRecordId):
-    pass
-
-urlpatterns = [
+urlpatterns = [ 
     path('admin/', admin.site.urls),
-    path("api/", api.urls),
+    path('api/crate/', crate.urls.api.urls)
 ]
