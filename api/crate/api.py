@@ -2,8 +2,11 @@ from django.http import HttpResponseBadRequest
 from ninja import Router
 import records.models
 import crate.schemas
+import wait.schemas
+import wait.api
 
 from typing import List
+from datetime import datetime, timedelta, date
 
 
 router = Router()
@@ -51,27 +54,12 @@ def get_crate_records(request, limit: int = 100, offset: int = 0):
 @router.delete('/delete_record')
 def delete_crate_record(request, id: int):
     try:
-        ret = records.models.Record.objects.filter(id=id, record_type=records.models.RecordTypes.CRATE).delete()
+        ret = records.models.Record.objects.filter(
+            id=id, record_type=records.models.RecordTypes.CRATE).delete()
         if ret[0] == 0:
             raise ValueError('Deleted zero elements')
     except Exception as e:
         print(f'Failed to delete id{id}: {e}')
-        return {'result': 'error', 'code': 1}
-    else:
-        return {'result': 'success', 'code': 0}
-
-@router.patch('/make_archive')
-def archive_crate_record(request, id: int):
-    try:
-        if id <= 0:
-            raise ValueError('Bad id')
-        ret = records.models.Record.objects.filter(
-            id=id, record_type=records.models.RecordTypes.CRATE).update(record_type=records.models.RecordTypes.ARCHIVE)
-        print(ret)
-        if ret == 0:
-            raise ValueError('Archived zero elements')
-    except Exception as e:
-        print(f'Failed to archive id{id}: {e}')
         return {'result': 'error', 'code': 1}
     else:
         return {'result': 'success', 'code': 0}

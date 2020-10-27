@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'records',
     'crate',
-    'archive'
+    'archive',
+    'notes',
+    'wait',
 ]
 
 MIDDLEWARE = [
