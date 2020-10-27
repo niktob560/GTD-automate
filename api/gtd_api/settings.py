@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'archive',
     'notes',
     'wait',
+    'done',
+    'later',
 ]
 
 MIDDLEWARE = [
