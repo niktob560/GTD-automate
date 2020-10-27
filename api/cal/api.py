@@ -12,11 +12,7 @@ def post_cal_record(request, r: cal.schemas.CalendarRecordIn):
     try:
         if r.note.__len__() < 4:
             raise ValueError('Note must contain at least 4 chars')
-        record = records.models.Record()
-        record.note = r.note
-        record.deadline = r.deadline
-        record.executor_info = r.executor
-        record.record_type = records.models.RecordTypes.CALENDAR
+        record = r.get_object()
         record.save()
     except Exception as e:
         print(f'Failed to post record: {e}')
@@ -84,7 +80,7 @@ def calendar_crate_record(request, id: int, additional: cal.schemas.CalendarReco
             raise ValueError('No such record')
         if r[0].record_type == records.models.RecordTypes.CALENDAR:
             raise ValueError('Already calendar record')
-        r.update(record_type=records.models.RecordTypes.CALENDAR, deadline=additional.deadline, executor_info=additional.executor)
+        r.update(record_type=records.models.RecordTypes.CALENDAR, deadline=additional.deadline)
     except Exception as e:
         print(f'Failed to calendar id{id}: {e}')
         return {'result': 'error', 'code': 1}

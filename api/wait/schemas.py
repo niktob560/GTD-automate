@@ -5,15 +5,28 @@ from pydantic_django import PydanticDjangoModel
 from datetime import datetime, date, time
 
 
+
 class AwaitRecordOut(PydanticDjangoModel):
     class Config:
         model = records.models.Record
         orm_mode = True
         exclude = records.models.Excludions.AWAIT
 
-class AwaitRecordIn(records.schemas.RecordIn):
+class AwaitRecordIn(PydanticDjangoModel):
     deadline: datetime
-    executor: str
+    executor_info: str
+    def get_object(self):
+        o = records.models.Record()
+        o.note = self.note
+        o.root_id = self.root_id
+        o.deadline = self.deadline
+        o.executor_info = self.executor_info
+        o.record_type = records.models.RecordTypes.AWAIT
+        return o
+    class Config:
+        model = records.models.Record
+        orm_mode = True
+        exclude = (list(records.models.Excludions.IN_EXCLUDE) + list(records.models.Excludions.AWAIT))
 
 class AwaitRecordFromCrate(Schema):
     deadline: datetime

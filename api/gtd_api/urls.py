@@ -26,6 +26,7 @@ from wait.api import router as wait_router
 from done.api import router as done_router
 from later.api import router as later_router
 from cal.api import router as cal_router
+from current.api import router as current_router
 
 
 api = NinjaAPI()
@@ -36,6 +37,7 @@ api.add_router('/await/', wait_router)
 api.add_router('/done/', done_router)
 api.add_router('/later/', later_router)
 api.add_router('/calendar/', cal_router)
+api.add_router('/current/', current_router)
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),

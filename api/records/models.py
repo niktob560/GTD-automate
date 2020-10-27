@@ -4,13 +4,16 @@ from django.utils.translation import gettext_lazy as _
 from enum import Enum
 
 class Excludions:
-    CRATE = ('record_type', 'deadline', 'executor_info', 'done_criteria', 'done_plan')
+    IN_EXCLUDE = ('creation_date', 'id', 'record_type')
+    OUT_EXCLUDE = ('record_type',)
+    CRATE = ('deadline', 'executor_info', 'done_criteria', 'done_plan')
     ARCHIVE = ()
-    NOTE = ('record_type', 'deadline', 'executor_info', 'done_criteria', 'done_plan')
-    AWAIT = ('record_type', 'done_criteria', 'done_plan')
-    LATER = ('record_type', 'deadline', 'executor_info', 'done_criteria', 'done_plan')
-    CALENDAR = ('record_type', 'executor_info', 'done_criteria', 'done_plan')
-    PROJECT = ('record_type', 'deadline', 'executor_info')
+    NOTE = ('deadline', 'executor_info', 'done_criteria', 'done_plan')
+    AWAIT = ('done_criteria', 'done_plan')
+    LATER = ('deadline', 'executor_info', 'done_criteria', 'done_plan')
+    CALENDAR = ('executor_info', 'done_criteria', 'done_plan')
+    PROJECT = ('deadline', 'executor_info')
+    CURRENT = ()
     DONE = ()
 
 class RecordTypes:
@@ -22,6 +25,7 @@ class RecordTypes:
     CALENDAR = 'calendar'
     PROJECT = 'project'
     DONE = 'done'
+    CURRENT = 'current'
 class Record(models.Model):
     id = models.IntegerField(primary_key=True, db_column='id')
     creation_date = models.DateTimeField(

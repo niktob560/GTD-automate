@@ -12,9 +12,7 @@ def post_done_record(request, r: done.schemas.DoneRecordIn):
     try:
         if r.done.__len__() < 4:
             raise ValueError('Note must contain at least 4 chars')
-        record = records.models.Record()
-        record.done = r.done
-        record.record_type = records.models.RecordTypes.DONE
+        record = r.get_object()
         record.save()
     except Exception as e:
         print(f'Failed to post record: {e}')

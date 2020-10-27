@@ -12,9 +12,7 @@ def post_later_record(request, r: later.schemas.LaterRecordIn):
     try:
         if r.note.__len__() < 4:
             raise ValueError('Note must contain at least 4 chars')
-        record = records.models.Record()
-        record.note = r.note
-        record.record_type = records.models.RecordTypes.LATER
+        record = r.get_object()
         record.save()
     except Exception as e:
         print(f'Failed to post record: {e}')

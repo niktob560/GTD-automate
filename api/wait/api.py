@@ -12,11 +12,7 @@ def post_wait_record(request, r: wait.schemas.AwaitRecordIn):
     try:
         if r.note.__len__() < 4:
             raise ValueError('Note must contain at least 4 chars')
-        record = records.models.Record()
-        record.note = r.note
-        record.deadline = r.deadline
-        record.executor_info = r.executor
-        record.record_type = records.models.RecordTypes.AWAIT
+        record = r.get_object()
         record.save()
     except Exception as e:
         print(f'Failed to post record: {e}')

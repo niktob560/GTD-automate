@@ -9,15 +9,24 @@ class CalendarRecordOut(PydanticDjangoModel):
     class Config:
         model = records.models.Record
         orm_mode = True
-        exclude = records.models.Excludions.AWAIT
+        exclude = (list(records.models.Excludions.OUT_EXCLUDE) + list(records.models.Excludions.CALENDAR))
 
-class CalendarRecordIn(records.schemas.RecordIn):
+class CalendarRecordIn(PydanticDjangoModel):
     deadline: datetime
-    executor: str
+    def get_object(self):
+        o = records.models.Record()
+        o.note = self.note
+        o.root_id = self.root_id
+        o.deadline = self.deadline
+        o.record_type = records.models.RecordTypes.CALENDAR
+        return o
+    class Config:
+        model = records.models.Record
+        orm_mode = True
+        exclude = (list(records.models.Excludions.IN_EXCLUDE) + list(records.models.Excludions.CALENDAR))
 
 class CalendarRecordFromCrate(Schema):
     deadline: datetime
-    executor: str
 
 class Deadline(Schema):
     deadline: datetime
