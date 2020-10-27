@@ -10,4 +10,4 @@ class ArchiveRecordOut(PydanticDjangoModel):
     class Config:
         model = records.models.Record
         orm_mode = True
-        exclude = ('record_type')
+        exclude = records.models.Excludions.ARCHIVE
