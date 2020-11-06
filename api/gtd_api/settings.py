@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'wait',
     'done',
     'later',
+    'security',
 ]
 
 MIDDLEWARE = [
