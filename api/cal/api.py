@@ -65,7 +65,6 @@ def update_deadline(request, record_id: int, new_deadline: cal.schemas.Deadline)
         if record_id <= 0:
             raise ValueError('Bad id')
         ret = records.models.Record.objects.filter(id=record_id, owner_token=request.auth.owner_token).update(deadline=new_deadline.deadline)
-        print(ret)
         if ret == 0:
             raise ValueError('Updated zero elements')
     except Exception as e:
@@ -78,7 +77,6 @@ def update_deadline(request, record_id: int, new_deadline: cal.schemas.Deadline)
 def calendar_crate_record(request, id: int, additional: cal.schemas.CalendarRecordFromCrate):
     try:
         r = records.models.Record.objects.filter(id=id, owner_token=request.auth.owner_token)
-        print(r)
         if not r:
             raise ValueError('No such record')
         if r[0].record_type == records.models.RecordTypes.CALENDAR:
