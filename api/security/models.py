@@ -13,7 +13,7 @@ class LongToken(models.Model):
 class ExpiringToken(models.Model):
     id = models.IntegerField(primary_key=True, db_column='id')
     token = models.CharField(max_length=4096, db_column='token')
-    expire_at = models.DateTimeField(db_column='expire_at', auto_now_add=True, blank=True)
+    expire_at = models.DateTimeField(db_column='expire_at')
     owner_token_id = models.ForeignKey(LongToken, on_delete=models.CASCADE, db_column='owner_token_id')
 
     def as_json(self):

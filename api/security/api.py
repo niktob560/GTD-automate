@@ -1,5 +1,6 @@
 from django.http import HttpResponseBadRequest
 from ninja import Router
+from ninja.security import HttpBearer
 import records.models
 import security.models
 import security.schemas
@@ -19,6 +20,13 @@ def generate_token(len=4096):
 
 def get_expiration_datetime():
     return datetime.now() + timedelta(days=1)
+
+
+class AuthBearer(HttpBearer):
+    def authenticate(self, request, token):
+        et = security.models.ExpiringToken.objects.filter(token=token, expire_at__gt = datetime.now())
+        if et and et.__len__() == 1:
+            return et
 
 
 router = Router()
@@ -43,4 +51,8 @@ def login(request, lt: security.schemas.TokenIn):
         print(f'Failed to login: {e}')
         return {'result': 'error', 'code': 1}
     else:
-        return {'result': 'success', 'code': 0, 'token': t}
+        return {'result': 'success', 'code': 0, 'token': t, 'expire_at': et.expire_at.strftime("%Y-%m-%d %H:%M:%S")}
+
+@router.get('/test', auth=AuthBearer())
+def test(request):
+    return {'result': 'success', 'code': 0}
