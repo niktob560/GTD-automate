@@ -10,7 +10,7 @@ class AwaitRecordOut(PydanticDjangoModel):
     class Config:
         model = records.models.Record
         orm_mode = True
-        exclude = records.models.Excludions.AWAIT
+        exclude = (list(records.models.Excludions.OUT_EXCLUDE) + list(records.models.Excludions.AWAIT))
 
 class AwaitRecordIn(PydanticDjangoModel):
     deadline: datetime
