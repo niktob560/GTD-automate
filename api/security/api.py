@@ -26,7 +26,7 @@ class AuthBearer(HttpBearer):
     def authenticate(self, request, token):
         et = security.models.ExpiringToken.objects.filter(token=token, expire_at__gt = datetime.now())
         if et and et.__len__() == 1:
-            return et
+            return et.first()
 
 
 router = Router()
@@ -42,7 +42,7 @@ def login(request, lt: security.schemas.TokenIn):
         lt = lt.get_object()
         lt.id = q.id
         et = security.models.ExpiringToken()
-        et.owner_token_id = lt
+        et.owner_token = lt
         et.token = generate_token()
         et.expire_at = get_expiration_datetime()
         t = et.token
