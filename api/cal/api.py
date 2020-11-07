@@ -17,9 +17,11 @@ def post_cal_record(request, r: cal.schemas.CalendarRecordIn):
         record = r.get_object()
         record.owner_token = request.auth.owner_token
         record.save()
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to post record: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -53,9 +55,11 @@ def delete_cal_record(request, id: int):
         ret = records.models.Record.objects.filter(id=id, record_type=records.models.RecordTypes.CALENDAR, owner_token=request.auth.owner_token).delete()
         if ret[0] == 0:
             raise ValueError('Deleted zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to delete id{id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -67,9 +71,11 @@ def update_deadline(request, record_id: int, new_deadline: cal.schemas.Deadline)
         ret = records.models.Record.objects.filter(id=record_id, owner_token=request.auth.owner_token).update(deadline=new_deadline.deadline)
         if ret == 0:
             raise ValueError('Updated zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to update deadline id {id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -84,9 +90,11 @@ def calendar_crate_record(request, id: int, additional: cal.schemas.CalendarReco
         r.update(record_type=records.models.RecordTypes.CALENDAR, deadline=additional.deadline)
         if additional.note:
             r.update(note=additional.note)
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to calendar id{id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
