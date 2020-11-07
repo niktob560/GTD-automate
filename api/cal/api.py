@@ -82,6 +82,8 @@ def calendar_crate_record(request, id: int, additional: cal.schemas.CalendarReco
         if r[0].record_type == records.models.RecordTypes.CALENDAR:
             raise ValueError('Already calendar record')
         r.update(record_type=records.models.RecordTypes.CALENDAR, deadline=additional.deadline)
+        if additional.note:
+            r.update(note=additional.note)
     except Exception as e:
         print(f'Failed to calendar id{id}: {e}')
         return {'result': 'error', 'code': 1}

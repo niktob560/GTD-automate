@@ -63,12 +63,16 @@ def delete_current_record(request, id: int):
 
 
 @router.patch('/make_current', auth=AuthBearer())
-def current_crate_record(request, id: int):
+def current_crate_record(request, id: int, new_note: records.schemas.Note = None):
     try:
         if id <= 0:
             raise ValueError('Bad id')
         ret = records.models.Record.objects.filter(
-            id=id, owner_token=request.auth.owner_token).update(record_type=records.models.RecordTypes.CURRENT)
+            id=id, owner_token=request.auth.owner_token)
+        if new_note:
+            ret.update(record_type=records.models.RecordTypes.CURRENT, note=new_note.note)
+        else:
+            ret.update(record_type=records.models.RecordTypes.CURRENT)
         if ret == 0:
             raise ValueError('Changed zero elements')
     except Exception as e:

@@ -27,6 +27,7 @@ class CalendarRecordIn(PydanticDjangoModel):
 
 class CalendarRecordFromCrate(Schema):
     deadline: datetime
+    note: str = None
 
 class Deadline(Schema):
     deadline: datetime
