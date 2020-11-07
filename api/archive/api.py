@@ -61,13 +61,16 @@ def delete_archive_record(request, id: int):
 
 
 @router.patch('/make_archive', auth=AuthBearer())
-def archive_crate_record(request, id: int):
+def archive_crate_record(request, id: int, new_note: records.schemas.Note = None):
     try:
         if id <= 0:
             raise ValueError('Bad id')
-        ret = records.models.Record.objects.filter(
-            id=id).update(record_type=records.models.RecordTypes.ARCHIVE, owner_token=request.auth.owner_token)
-        print(ret)
+        if new_note:
+            ret = records.models.Record.objects.filter(
+                id=id, owner_token=request.auth.owner_token).update(record_type=records.models.RecordTypes.ARCHIVE, note=new_note.note)
+        else:
+            ret = records.models.Record.objects.filter(
+                id=id, owner_token=request.auth.owner_token).update(record_type=records.models.RecordTypes.ARCHIVE)
         if ret == 0:
             raise ValueError('Changed zero elements')
     except Exception as e:
