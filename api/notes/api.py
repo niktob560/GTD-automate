@@ -18,9 +18,11 @@ def post_notes_record(request, r: notes.schemas.NotesRecordIn):
         record = r.get_object()
         record.owner_token = request.auth.owner_token
         record.save()
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to post record: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -55,9 +57,11 @@ def delete_notes_record(request, id: int):
             id=id, record_type=records.models.RecordTypes.NOTE, owner_token=request.auth.owner_token).delete()
         if ret[0] == 0:
             raise ValueError('Deleted zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to delete id{id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -74,9 +78,11 @@ def note_crate_record(request, id: int, new_note: records.schemas.Note = None):
         ret.update(record_type=records.models.RecordTypes.NOTE)
         if ret == 0:
             raise ValueError('Changed zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to note id{id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
