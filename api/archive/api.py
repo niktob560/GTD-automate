@@ -17,9 +17,11 @@ def post_archive_record(request, r: archive.schemas.ArchiveRecordIn):
         record = r.get_object()
         record.owner_token = request.auth.owner_token
         record.save()
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to post record: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -53,9 +55,11 @@ def delete_archive_record(request, id: int):
         ret = records.models.Record.objects.filter(id=id, record_type=records.models.RecordTypes.ARCHIVE, owner_token=request.auth.owner_token).delete()
         if ret[0] == 0:
             raise ValueError('Deleted zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to delete id{id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -73,9 +77,11 @@ def archive_crate_record(request, id: int, new_note: records.schemas.Note = None
                 id=id, owner_token=request.auth.owner_token).update(record_type=records.models.RecordTypes.ARCHIVE)
         if ret == 0:
             raise ValueError('Changed zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to archive id{id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
