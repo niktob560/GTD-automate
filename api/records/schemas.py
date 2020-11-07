@@ -23,3 +23,6 @@ class RecordOut(PydanticDjangoModel):
         model = records.models.Record
         orm_mode = True
         exclude = records.models.Excludions.OUT_EXCLUDE
+
+class Note(Schema):
+    note: str

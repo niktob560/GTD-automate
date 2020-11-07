@@ -109,7 +109,7 @@ def update_done_pan(request, record_id: int, new_done: projects.schemas.DonePlan
 
 
 @router.patch('/update_note', auth=AuthBearer())
-def update_note(request, record_id: int, new_note: projects.schemas.Note):
+def update_note(request, record_id: int, new_note: records.schemas.Note):
     try:
         if record_id <= 0:
             raise ValueError('Bad id')

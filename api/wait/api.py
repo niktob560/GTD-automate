@@ -106,3 +106,21 @@ def await_crate_record(request, id: int, additional: wait.schemas.AwaitRecordFro
         return {'result': 'error', 'code': 1}
     else:
         return {'result': 'success', 'code': 0}
+
+
+@router.patch('/update_note', auth=AuthBearer())
+def update_note(request, record_id: int, new_note: records.schemas.Note):
+    try:
+        if record_id <= 0:
+            raise ValueError('Bad id')
+        ret = records.models.Record.objects.filter(
+            id=record_id, record_type=records.models.RecordTypes.AWAIT, owner_token=request.auth.owner_token).update(note=new_note.note)
+        if ret == 0:
+            raise ValueError('Updated zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
+    except Exception as e:
+        print(f'Failed to note id {id}: {e}')
+        return {'result': 'error', 'code': 2}
+    else:
+        return {'result': 'success', 'code': 0}

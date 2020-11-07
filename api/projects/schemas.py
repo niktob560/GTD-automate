@@ -44,6 +44,3 @@ class DoneCriteria(Schema):
 
 class DonePlan(Schema):
     plan: str
-
-class Note(Schema):
-    note: str
