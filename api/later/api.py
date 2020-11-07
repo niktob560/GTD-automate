@@ -63,13 +63,15 @@ def delete_later_record(request, id: int):
 
 
 @router.patch('/make_later', auth=AuthBearer())
-def later_crate_record(request, id: int):
+def later_crate_record(request, id: int, new_note: records.schemas.Note = None):
     try:
         if id <= 0:
             raise ValueError('Bad id')
         ret = records.models.Record.objects.filter(
-            id=id, owner_token=request.auth.owner_token).update(record_type=records.models.RecordTypes.LATER)
-        print(ret)
+            id=id, owner_token=request.auth.owner_token)
+        if new_note:
+            ret.update(note=new_note)
+        ret.update(record_type=records.models.RecordTypes.LATER)
         if ret == 0:
             raise ValueError('Changed zero elements')
     except Exception as e:
