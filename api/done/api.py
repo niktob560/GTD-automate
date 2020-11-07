@@ -63,13 +63,15 @@ def delete_done_record(request, id: int):
 
 
 @router.patch('/make_done', auth=AuthBearer())
-def done_crate_record(request, id: int):
+def done_crate_record(request, id: int, new_note: records.schemas.Note = None):
     try:
         if id <= 0:
             raise ValueError('Bad id')
         ret = records.models.Record.objects.filter(
-            id=id, owner_token=request.auth.owner_token).update(record_type=records.models.RecordTypes.DONE)
-        print(ret)
+            id=id, owner_token=request.auth.owner_token)
+        if new_note:
+            ret.update(note=new_note.note)
+        ret.update(record_type=records.models.RecordTypes.DONE)
         if ret == 0:
             raise ValueError('Changed zero elements')
     except Exception as e:
