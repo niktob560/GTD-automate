@@ -10,7 +10,7 @@ class TokenIn(PydanticDjangoModel):
     class Config:
         model = security.models.LongToken
         orm_mode = True
-        exclude = ('id', 'expiringtoken')
+        exclude = ('id', 'expiringtoken', 'record')
 
 
 class TokenOut(PydanticDjangoModel):

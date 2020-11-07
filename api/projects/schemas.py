@@ -1,10 +1,16 @@
 import records.schemas
-import wait.models
+import projects.models
 from ninja import Schema
 from pydantic_django import PydanticDjangoModel
 from datetime import datetime, date, time
+from typing import List
 
 
+class PlanRecord(PydanticDjangoModel):
+    class Config:
+        model = records.models.Record
+        orm_mode = True
+        exclude = ('owner_token',)
 
 class ProjectRecordOut(PydanticDjangoModel):
     class Config:
@@ -13,8 +19,6 @@ class ProjectRecordOut(PydanticDjangoModel):
         exclude = (list(records.models.Excludions.OUT_EXCLUDE) + list(records.models.Excludions.PROJECT))
 
 class ProjectRecordIn(PydanticDjangoModel):
-    done_criteria: str
-    done_plan: str
     def get_object(self):
         o = records.models.Record()
         o.note = self.note
@@ -28,13 +32,18 @@ class ProjectRecordIn(PydanticDjangoModel):
         orm_mode = True
         exclude = (list(records.models.Excludions.IN_EXCLUDE) + list(records.models.Excludions.PROJECT))
 
+
 class ProjectRecordFromCrate(Schema):
     done_criteria: str
     done_plan: str
-    steps_ids: list(int)
+    deadline: datetime
+    steps: List[str]
 
 class DoneCriteria(Schema):
-    deadline: datetime
+    criteria: str
 
 class DonePlan(Schema):
-    executor: str
+    plan: str
+
+class Note(Schema):
+    note: str

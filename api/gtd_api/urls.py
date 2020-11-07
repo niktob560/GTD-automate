@@ -28,6 +28,7 @@ from later.api import router as later_router
 from cal.api import router as cal_router
 from current.api import router as current_router
 from security.api import router as security_router
+from projects.api import router as projects_router
 
 
 api = NinjaAPI()
@@ -40,6 +41,7 @@ api.add_router('/later/', later_router)
 api.add_router('/calendar/', cal_router)
 api.add_router('/current/', current_router)
 api.add_router('/security/', security_router)
+api.add_router('/projects/', projects_router)
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
