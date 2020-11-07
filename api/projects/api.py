@@ -145,6 +145,8 @@ def aprojects_crate_record(request, id: int, additional: projects.schemas.Projec
             record.owner_token = request.auth.owner_token
             record.record_type = records.models.RecordTypes.CRATE
             record.save()
+        if additional.note:
+            r.update(note=additional.note)
         r.update(record_type=records.models.RecordTypes.PROJECT,
                  deadline=additional.deadline, 
                  done_plan=additional.done_plan,

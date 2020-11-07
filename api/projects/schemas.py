@@ -34,6 +34,7 @@ class ProjectRecordIn(PydanticDjangoModel):
 
 
 class ProjectRecordFromCrate(Schema):
+    note: str = None
     done_criteria: str
     done_plan: str
     deadline: datetime
