@@ -81,7 +81,6 @@ def update_executor(request, record_id: int, new_executor: wait.schemas.Executor
         if record_id <= 0:
             raise ValueError('Bad id')
         ret = records.models.Record.objects.filter(id=record_id, owner_token=request.auth.owner_token).update(executor_info=new_executor.executor)
-        print(ret)
         if ret == 0:
             raise ValueError('Updated zero elements')
     except Exception as e:
@@ -100,9 +99,11 @@ def await_crate_record(request, id: int, additional: wait.schemas.AwaitRecordFro
             raise ValueError('No such record')
         if r[0].record_type == records.models.RecordTypes.AWAIT:
             raise ValueError('Already await record')
+        if additional.note:
+            r.update(note=additional.note)
         r.update(record_type=records.models.RecordTypes.AWAIT, deadline=additional.deadline, executor_info=additional.executor)
     except Exception as e:
-        print(f'Failed to await id{id}: {e}')
+        print(f'Failed to await id {id}: {e}')
         return {'result': 'error', 'code': 1}
     else:
         return {'result': 'success', 'code': 0}

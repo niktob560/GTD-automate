@@ -29,6 +29,7 @@ class AwaitRecordIn(PydanticDjangoModel):
         exclude = (list(records.models.Excludions.IN_EXCLUDE) + list(records.models.Excludions.AWAIT))
 
 class AwaitRecordFromCrate(Schema):
+    note: str = None
     deadline: datetime
     executor: str
 
