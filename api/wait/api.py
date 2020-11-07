@@ -18,9 +18,11 @@ def post_wait_record(request, r: wait.schemas.AwaitRecordIn):
         record = r.get_object()
         record.owner_token = request.auth.owner_token
         record.save()
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to post record: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -54,9 +56,11 @@ def delete_wait_record(request, id: int):
         ret = records.models.Record.objects.filter(id=id, record_type=records.models.RecordTypes.AWAIT, owner_token=request.auth.owner_token).delete()
         if ret[0] == 0:
             raise ValueError('Deleted zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to delete id{id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -69,9 +73,11 @@ def update_deadline(request, record_id: int, new_deadline: wait.schemas.Deadline
         print(ret)
         if ret == 0:
             raise ValueError('Updated zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to update deadline id {id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -83,9 +89,11 @@ def update_executor(request, record_id: int, new_executor: wait.schemas.Executor
         ret = records.models.Record.objects.filter(id=record_id, owner_token=request.auth.owner_token).update(executor_info=new_executor.executor)
         if ret == 0:
             raise ValueError('Updated zero elements')
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to update executor id {id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
@@ -102,9 +110,11 @@ def await_crate_record(request, id: int, additional: wait.schemas.AwaitRecordFro
         if additional.note:
             r.update(note=additional.note)
         r.update(record_type=records.models.RecordTypes.AWAIT, deadline=additional.deadline, executor_info=additional.executor)
+    except ValueError as e:
+        return {'result': 'error', 'code': 1, 'info': f'{e}'}
     except Exception as e:
         print(f'Failed to await id {id}: {e}')
-        return {'result': 'error', 'code': 1}
+        return {'result': 'error', 'code': 2}
     else:
         return {'result': 'success', 'code': 0}
 
