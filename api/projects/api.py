@@ -148,7 +148,6 @@ def aprojects_crate_record(request, id: int, additional: projects.schemas.Projec
         if additional.note:
             r.update(note=additional.note)
         r.update(record_type=records.models.RecordTypes.PROJECT,
-                 deadline=additional.deadline, 
                  done_plan=additional.done_plan,
                  done_criteria=additional.done_criteria)
     except ValueError as e:

@@ -37,7 +37,6 @@ class ProjectRecordFromCrate(Schema):
     note: str = None
     done_criteria: str
     done_plan: str
-    deadline: datetime
     steps: List[str]
 
 class DoneCriteria(Schema):
