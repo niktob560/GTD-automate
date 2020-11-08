@@ -6,7 +6,7 @@ services:
         ports:
         - 3308:3306
         environment:
-            MYSQL_DATABASE: db
+            MYSQL_DATABASE: gtd
             MYSQL_ROOT_PASSWORD: UVccgtumSpFpEi76zs1Ww8UZFNrDF8u1CGYbtWmXdm7M4NjLqufdLxf5pTP7FFRTfW3akV9QXeI8YQse4aeHDrArWiPFq81Mh7v6q1mCsUFMq9FYkboDgLFp34xK3Adt
             MYSQL_USER: AUTOMAT
             MYSQL_PASSWORD: WiTSDmtChVmNS53szQZTh5mwPFHTAc9k

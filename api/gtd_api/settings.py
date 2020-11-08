@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'gtd_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db',
+        'NAME': 'gtd',
         'USER': 'AUTOMAT',
         'PASSWORD': 'WiTSDmtChVmNS53szQZTh5mwPFHTAc9k',
         'HOST': 'mariadb',
