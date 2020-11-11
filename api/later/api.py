@@ -74,7 +74,7 @@ def later_crate_record(request, id: int, new_note: records.schemas.Note = None):
         ret = records.models.Record.objects.filter(
             id=id, owner_token=request.auth.owner_token)
         if new_note:
-            ret.update(note=new_note)
+            ret.update(note=new_note.note)
         ret.update(record_type=records.models.RecordTypes.LATER)
         if ret == 0:
             raise ValueError('Changed zero elements')
